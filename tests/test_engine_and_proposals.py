@@ -67,6 +67,15 @@ def test_proposal_orders_are_whole_share_limit_and_sell_oco(settings):
     assert p["oco_problems"] == []
 
 
+def test_proposals_never_contain_a_real_account_number(settings, monkeypatch):
+    s = copy.deepcopy(settings)
+    s["account"]["account_number"] = "123456789"
+    monkeypatch.setenv("RH_ACCOUNT_NUMBER", "987654321")
+    text = str(build_proposal(_plan(), s))
+    assert "123456789" not in text and "987654321" not in text
+    assert "<RH_ACCOUNT_NUMBER>" in text
+
+
 def test_oco_rules_flag_tight_legs(settings):
     p = build_proposal(_plan(stop=10.0, target=10.05), settings)
     assert len(p["oco_problems"]) >= 2

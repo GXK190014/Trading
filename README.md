@@ -137,8 +137,9 @@ python -m trader journal --mode paper        # stats + weaknesses
 
 `config/settings.json` ships with `"mode": "paper"` and `"live_trading_approved": false`.
 Proposals stay marked `PAPER_ONLY` until both are changed **at your explicit request**.
-The live account number is never committed; it goes in `config/local.json` (gitignored) or
-the `RH_ACCOUNT_NUMBER` environment variable.
+The live account number is never written to the repo: proposal files use the placeholder
+`<RH_ACCOUNT_NUMBER>`, which the agent replaces only when it makes the Robinhood call.
+`config/local.json` and `.env` are gitignored for any other local overrides.
 
 ## Layout
 

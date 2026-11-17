@@ -19,8 +19,12 @@ import json
 import uuid
 from pathlib import Path
 
-from .config import ROOT, account_number
+from .config import ROOT
 from .strategy import TradePlan
+
+# Proposal files are committed to git, so they never contain the real account number.
+# The agent substitutes it only at the moment it makes the MCP call.
+ACCOUNT_PLACEHOLDER = "<RH_ACCOUNT_NUMBER>"
 
 PROPOSALS_DIR = ROOT / "proposals"
 
@@ -44,7 +48,7 @@ def oco_checks(plan: TradePlan, rules: dict, ref_price: float | None = None) -> 
 
 
 def build_proposal(plan: TradePlan, settings: dict) -> dict:
-    acct = account_number(settings) or "<RH_ACCOUNT_NUMBER>"
+    acct = ACCOUNT_PLACEHOLDER
     qty = str(int(plan.shares))
     entry_params = {
         "account_number": acct, "symbol": plan.symbol, "side": "buy", "type": "limit",
