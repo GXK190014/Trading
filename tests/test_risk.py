@@ -132,3 +132,17 @@ def test_total_open_risk_budget(settings, costs):
 def test_stop_must_be_below_entry(settings, costs, entry, stop):
     rm, st = make(settings, costs)
     assert rm.size(st, entry, stop).shares == 0
+
+
+def test_percentage_costs_count_toward_the_two_percent_cap(settings):
+    from trader.costs import CostModel
+    crypto = CostModel.from_settings({**settings["costs"], "fee_pct": 0.0095, "half_spread_pct": 0.0,
+                                      "min_half_spread": 0.0})
+    rm = RiskManager({**settings["risk"], "whole_shares_only": False}, crypto)
+    st = RiskState(equity=25.0, cash=25.0, day_start_equity=25.0)
+    size = rm.size(st, entry=100.0, stop=95.0)
+    # stop distance 5% + ~0.95% to get in + ~1.1% to get out
+    assert crypto.risk_per_share(100.0, 95.0) > 5.0 + 0.95 + 0.9
+    assert size.max_loss <= 0.5 + 1e-9
+    target = crypto.target_for(100.0, 95.0, 2.0)
+    assert crypto.net_reward_per_share(100.0, target) >= 2.0 * crypto.risk_per_share(100.0, 95.0) - 1e-9

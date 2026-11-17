@@ -133,7 +133,7 @@ class RiskManager:
     def size(self, state: RiskState, entry: float, stop: float) -> SizeResult:
         if stop >= entry:
             return SizeResult(0, 0, 0, 0, "stop must be below entry")
-        risk_per_share = (entry - stop) + self.costs.stop_exit_cost_per_share(stop)
+        risk_per_share = self.costs.risk_per_share(entry, stop)
         open_risk = sum(p.risk_dollars for p in state.open_positions.values())
         budget = min(
             state.equity * self.cfg["max_risk_per_trade_pct"],
@@ -169,7 +169,7 @@ class RiskManager:
             problems.append("target not above entry")
         if net_rr + 1e-9 < self.cfg["min_reward_risk"]:
             problems.append(f"reward:risk {net_rr:.2f} < {self.cfg['min_reward_risk']}")
-        risk = shares * ((entry - stop) + self.costs.stop_exit_cost_per_share(stop))
+        risk = shares * self.costs.risk_per_share(entry, stop)
         if risk > state.equity * self.cfg["max_risk_per_trade_pct"] + 1e-9:
             problems.append("risk exceeds per-trade cap")
         if not self.cfg.get("allow_margin") and shares * entry > state.cash + 1e-9:
@@ -177,7 +177,7 @@ class RiskManager:
         return problems
 
     def register_entry(self, state: RiskState, symbol: str, shares: float, entry: float, stop: float) -> None:
-        risk = shares * ((entry - stop) + self.costs.stop_exit_cost_per_share(stop))
+        risk = shares * self.costs.risk_per_share(entry, stop)
         state.open_positions[symbol] = OpenRisk(symbol, shares, entry, stop, risk)
 
 

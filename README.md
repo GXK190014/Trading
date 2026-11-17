@@ -105,6 +105,30 @@ gave +14.5%.
   risk to go faster.
 * VWAP, news and earnings filters can't be tested on daily history; they apply live only.
 
+## Crypto: checked, not adopted (2026-11-17)
+
+Robinhood crypto removes the whole-share problem: fractional amounts can carry a broker-held
+stop order, there's no pattern-day-trader rule, and it trades 24/7. But:
+
+* **Costs:** live quotes on market-maker routing showed **~1.9% between bid and ask** on
+  BTC, ETH, SOL, DOGE and XRP (~0.95% each way). Stocks here cost ~0.1–0.4% round trip.
+  With a typical 5% crypto stop, roughly a quarter of each trade's risk goes to the spread.
+* **No app approval:** a crypto order preview on the MCP account returned
+  `customer_approval_required: false`, so crypto orders would skip the Robinhood-app approval
+  that stock orders get.
+* **No crypto history in the MCP:** `tools/crypto_proxy.py` uses the spot ETFs IBIT/ETHA
+  as price proxies (real Robinhood bars, weekdays only).
+
+| Dec 2024 → Nov 2026, $25 start | Result |
+|---|---|
+| Buy & hold Bitcoin ETF (IBIT) | **$17.53 (−30%)**, worst drawdown −53% |
+| Buy & hold Ether ETF (ETHA) | **$13.12 (−48%)**, worst drawdown −68% |
+| This strategy on IBIT/ETHA, 2% risk, crypto costs | $24.56 (−1.8%): 1 trade (a loss). The trend filter kept it in cash during the decline |
+
+Both proxies are below their 50-day EMA as of 2026-11-13, so the rules would not buy crypto now.
+Revisit if BTC regains its trend *and* a cheaper routing (Robinhood app → Settings → Crypto →
+Fee Tiers) measurably cuts the spread.
+
 ## Usage
 
 ```bash

@@ -1,0 +1,82 @@
+{
+  "strategy, Robinhood crypto costs (0.95%/side)": {
+    "final": 24.56,
+    "return_pct": -1.77,
+    "trades": 1,
+    "win_rate": 0.0,
+    "avg_r": -0.89,
+    "max_dd": 0.0177,
+    "fees": 0.159,
+    "trades_detail": [
+      {
+        "mode": "backtest",
+        "symbol": "IBIT",
+        "setup": "momentum_breakout",
+        "entry_time": "2025-10-07",
+        "entry_price": 70.97,
+        "exit_time": "2025-10-07",
+        "exit_price": 68.6135,
+        "shares": 0.120223,
+        "stop": 68.82,
+        "target": 81.22,
+        "reason_entry": "close 71.29 broke 20-day high 70.53; relative volume 1.5x; RSI 68, MACD above signal and rising; EMA 9 > 20 > 50 uptrend; nearest support 63.93, no overhead resistance in 120d; SPY regime bullish",
+        "reason_exit": "stop-loss (same day)",
+        "pnl": -0.4427,
+        "fees": 0.1594,
+        "r_multiple": -0.89,
+        "equity_before": 25.0,
+        "confidence": 94,
+        "followed_strategy": true,
+        "notes": []
+      }
+    ]
+  },
+  "strategy, hypothetical low costs (0.10%/side)": {
+    "final": 24.58,
+    "return_pct": -1.68,
+    "trades": 1,
+    "win_rate": 0.0,
+    "avg_r": -0.84,
+    "max_dd": 0.0168,
+    "fees": 0.024,
+    "trades_detail": [
+      {
+        "mode": "backtest",
+        "symbol": "IBIT",
+        "setup": "momentum_breakout",
+        "entry_time": "2025-10-07",
+        "entry_price": 70.97,
+        "exit_time": "2025-10-07",
+        "exit_price": 68.6135,
+        "shares": 0.168536,
+        "stop": 68.82,
+        "target": 77.54,
+        "reason_entry": "close 71.29 broke 20-day high 70.53; relative volume 1.5x; RSI 68, MACD above signal and rising; EMA 9 > 20 > 50 uptrend; nearest support 63.93, no overhead resistance in 120d; SPY regime bullish",
+        "reason_exit": "stop-loss (same day)",
+        "pnl": -0.4207,
+        "fees": 0.0235,
+        "r_multiple": -0.84,
+        "equity_before": 25.0,
+        "confidence": 94,
+        "followed_strategy": true,
+        "notes": []
+      }
+    ]
+  },
+  "buy & hold IBIT with all $25": {
+    "final": 17.53,
+    "return_pct": -29.9,
+    "max_dd": 0.533,
+    "peak": 32.4,
+    "first_close": 54.48,
+    "last_close": 38.94
+  },
+  "buy & hold ETHA with all $25": {
+    "final": 13.12,
+    "return_pct": -47.5,
+    "max_dd": 0.679,
+    "peak": 33.03,
+    "first_close": 82.29,
+    "last_close": 44.02
+  }
+}

@@ -204,9 +204,9 @@ def evaluate(symbol: str, df: pd.DataFrame, i: int, mkt: MarketContext, cfg: dic
     stop = round_price_down(stop_raw)
     if stop <= 0 or stop >= entry:
         return None, "invalid stop"
-    risk_ps = (entry - stop) + costs.stop_exit_cost_per_share(stop)
-    target = round_price_up(entry + 2.0 * risk_ps + costs.sell_fees(entry, 1.0) + 0.01)
-    reward_ps = (target - entry) - costs.sell_fees(target, 1.0)
+    risk_ps = costs.risk_per_share(entry, stop)
+    target = round_price_up(costs.target_for(entry, stop, 2.0) + 0.01)
+    reward_ps = costs.net_reward_per_share(entry, target)
     net_rr = reward_ps / risk_ps
 
     res = nearest_resistance(df, i, entry, cfg["resistance_lookback"], df["pivot_high"])
@@ -233,7 +233,7 @@ def build_plan(symbol: str, signal_date: str, cand: dict, shares: float, mkt: Ma
                costs: CostModel) -> TradePlan:
     entry, stop, target = cand["entry"], cand["stop"], cand["target"]
     risk_ps = cand["risk_per_share"]
-    reward_ps = (target - entry) - costs.sell_fees(target, 1.0)
+    reward_ps = costs.net_reward_per_share(entry, target)
     return TradePlan(
         symbol=symbol, setup=cand["setup"], signal_date=signal_date,
         entry=entry, stop=stop, target=target, shares=shares,
