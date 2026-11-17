@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+# never commit the live account number
+config/local.json
+.env

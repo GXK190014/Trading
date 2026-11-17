@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>$25 to $50 Tracker</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#16181d;--muted:#667085;--line:#e4e7ec;--accent:#2f6fed;--pos:#12805c;--neg:#c4320a;--warn:#b54708;--track:#e9edf5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1115;--card:#171a21;--ink:#e8eaee;--muted:#98a2b3;--line:#2a2f3a;--accent:#6e9bff;--pos:#3ccf91;--neg:#ff7a59;--warn:#f5b54a;--track:#262b36}}
+:root[data-theme="dark"]{--bg:#0f1115;--card:#171a21;--ink:#e8eaee;--muted:#98a2b3;--line:#2a2f3a;--accent:#6e9bff;--pos:#3ccf91;--neg:#ff7a59;--warn:#f5b54a;--track:#262b36}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:20px 16px 40px} h1{font-size:22px;margin:0 0 4px} h2{font-size:16px;margin:0 0 12px}
+.muted{color:var(--muted);font-size:13px} .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:14px}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;margin:6px 6px 0 0;border:1px solid var(--line)}
+.pill.ok{color:var(--pos)} .pill.bad{color:var(--neg)} .pill.warn{color:var(--warn)}
+.prog-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.big{font-size:34px;font-weight:700;letter-spacing:-.5px} .bar{height:14px;background:var(--track);border-radius:999px;overflow:hidden;margin:10px 0 6px}
+.fill{height:100%;background:var(--accent);border-radius:999px} .ends{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:14px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px} .tile .k{font-size:12px;color:var(--muted)} .tile .v{font-size:20px;font-weight:650;margin-top:2px}
+.pos{color:var(--pos)} .neg{color:var(--neg)} .tw{overflow-x:auto} table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap} th{color:var(--muted);font-weight:600}
+.spark{width:100%;height:auto} .spark .line{fill:none;stroke:var(--accent);stroke-width:2} .spark .base{stroke:var(--muted);stroke-dasharray:4 4} .spark .tgt{stroke:var(--pos);stroke-dasharray:2 4}
+.axis{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)} ul{margin:6px 0 0 18px;padding:0}
+</style></head><body><main>
+<h1>$25 → $50</h1>
+<div class="muted">Mode: <b>PAPER</b> · updated 2026-11-17 05:38 UTC</div>
+<div><span class="pill ok">Trading active</span></div>
+<section class="card"><div class="prog-top"><div><div class="muted">Account equity</div><div class="big">$25.00</div></div>
+<div class="muted">0% of the way to $50.00</div></div>
+<div class="bar" role="progressbar" aria-valuemin="25.0" aria-valuemax="50.0" aria-valuenow="25.00"><div class="fill" style="width:0.0%"></div></div>
+<div class="ends"><span>Start $25.00</span><span>Target $50.00</span></div></section>
+<div class="grid">
+<div class="tile"><div class="k">Daily P&amp;L</div><div class="v ">+$0.00</div></div>
+<div class="tile"><div class="k">Realized P&amp;L</div><div class="v ">+$0.00</div></div>
+<div class="tile"><div class="k">Unrealized P&amp;L</div><div class="v ">+$0.00</div></div>
+<div class="tile"><div class="k">Win rate</div><div class="v">—</div></div>
+<div class="tile"><div class="k">Trades</div><div class="v">0</div></div>
+<div class="tile"><div class="k">Open risk</div><div class="v">$0.00</div><div class="k">0.0% of equity · $0.00 deployed</div></div>
+<div class="tile"><div class="k">Loss streak / day trades</div><div class="v">0 / 0</div></div>
+</div>
+<section class="card"><h2>Equity curve</h2><p class="muted">Equity curve appears after the first sessions are processed.</p></section>
+<section class="card"><h2>Open positions</h2><p class="muted">No open positions — holding cash.</p></section>
+<section class="card"><h2>Current signals</h2><p class="muted">Scan of 2026-11-13 close · market bearish · SPY below its 50 EMA (downtrend regime)</p><p class="muted">No setup meets every rule right now — hold cash.</p></section>
+<section class="card"><h2>Trade journal</h2><p class="muted">No closed trades yet.</p>
+<h2 style="margin-top:14px">Weaknesses</h2><ul><li>no trades yet -- nothing to evaluate</li></ul></section>
+<section class="card"><h2>Backtest (real Robinhood daily bars)</h2>
+<p>2024-12-02 → 2026-11-13, 48 symbols:
+<b>$25.00 → $29.16</b> (+16.6%),
+12 trades, win rate 75%, avg +0.88R,
+max drawdown 4.9%. Target reached: no.</p>
+<ul><li>only 12 trades: too few to judge the edge statistically (aim for 30+)</li><li>1 stop(s) gapped through: real losses can exceed the planned 2% risk</li><li>5 trades hit the time exit -- targets may be too far for the holding period</li></ul></section>
+<p class="muted">No profits are promised. Every live order needs your approval in chat and again in the Robinhood app.</p>
+</main></body></html>

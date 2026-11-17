@@ -1,0 +1,17 @@
+{
+  "day": "2026-11-13",
+  "market": {
+    "ok": false,
+    "sentiment": "bearish",
+    "reasons": [
+      "SPY below its 50 EMA (downtrend regime)"
+    ],
+    "spy_close": 754.37,
+    "spy_rsi": 47.0843599027983,
+    "spy_atr_pct": 0.014629072968365731,
+    "breadth_above_50ema": 0.229
+  },
+  "plans": [],
+  "blocked": [],
+  "generated": "2026-11-17T05:32:41+00:00"
+}
