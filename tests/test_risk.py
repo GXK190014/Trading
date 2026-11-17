@@ -146,3 +146,21 @@ def test_percentage_costs_count_toward_the_two_percent_cap(settings):
     assert size.max_loss <= 0.5 + 1e-9
     target = crypto.target_for(100.0, 95.0, 2.0)
     assert crypto.net_reward_per_share(100.0, target) >= 2.0 * crypto.risk_per_share(100.0, 95.0) - 1e-9
+
+
+def test_live_profile_caps_risk_at_its_configured_percentage(live_settings, costs):
+    cap = live_settings["risk"]["max_risk_per_trade_pct"]
+    assert cap <= 0.10, "live risk per trade must never exceed 10% without an explicit decision"
+    rm = RiskManager(live_settings["risk"], costs)
+    st = RiskState(equity=25.0, cash=25.0, day_start_equity=25.0)
+    size = rm.size(st, entry=10.0, stop=9.0)
+    assert 0 < size.max_loss <= cap * 25.0 + 1e-9
+    assert size.position_value <= 25.0 + 1e-9  # never more than the cash in the account
+
+
+def test_equity_floor_stops_new_trades(live_settings, costs):
+    rm = RiskManager(live_settings["risk"], costs)
+    floor = live_settings["risk"]["equity_floor"]
+    st = RiskState(equity=floor - 0.01, cash=floor - 0.01, day_start_equity=floor)
+    ok, why = rm.can_open_new(st, "2026-11-17")
+    assert not ok and "floor" in why

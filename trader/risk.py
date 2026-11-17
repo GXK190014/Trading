@@ -120,6 +120,9 @@ class RiskManager:
         return sum(1 for t in state.day_trades if start <= np.datetime64(t) <= d)
 
     def can_open_new(self, state: RiskState, day: str) -> tuple[bool, str | None]:
+        floor = self.cfg.get("equity_floor", 0.0)
+        if floor and state.equity < floor:
+            return False, f"equity ${state.equity:.2f} below the ${floor:.2f} floor -- review before trading"
         if state.halted:
             return False, f"halted: {state.halt_reason}"
         if state.day_halted:

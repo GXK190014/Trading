@@ -157,6 +157,13 @@ python -m trader journal --mode paper        # stats + weaknesses
    `place_advanced_order`) → you approve in the app.
 7. **On exit:** `python -m trader live fill --side sell …`, `live sync`, `dashboard --mode live`.
 
+### Live profile in use (2026-11-17)
+
+At the user's request the system now trades live with an **aggressive** profile: 10% max loss
+per trade, 15% daily loss stop, pause after 3 straight losses, stop below $15 equity, market
+filter ON. Backtest of this profile (same data): $25 → $44.36 (+77%) over two years, but
+**−11% over the most recent year** (2 of 9 trades won). See `RUNBOOK.md` for the scheduled checks.
+
 ### Enabling live trading
 
 `config/settings.json` ships with `"mode": "paper"` and `"live_trading_approved": false`.

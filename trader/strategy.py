@@ -88,7 +88,7 @@ def market_context(spy: pd.DataFrame | None, i_date, cfg: dict, breadth: float |
     reasons, ok = [], True
     if pd.isna(row["ema_slow"]) or pd.isna(row["atr_pct"]):
         return MarketContext(False, "unknown", ["market indicators warming up"])
-    if row["close"] <= row["ema_slow"]:
+    if cfg.get("market_require_uptrend", True) and row["close"] <= row["ema_slow"]:
         ok = False
         reasons.append("SPY below its 50 EMA (downtrend regime)")
     if row["atr_pct"] > cfg["market_max_atr_pct"]:

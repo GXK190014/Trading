@@ -1,30 +1,28 @@
 {
-  "mode": "paper",
-  "live_trading_approved": false,
-
+  "mode": "live",
+  "live_trading_approved": true,
   "account": {
     "starting_balance": 25.0,
     "target_balance": 50.0,
     "broker": "robinhood_mcp",
     "account_number_env": "RH_ACCOUNT_NUMBER"
   },
-
   "risk": {
-    "max_risk_per_trade_pct": 0.02,
+    "max_risk_per_trade_pct": 0.1,
     "min_reward_risk": 2.0,
-    "max_consecutive_losses": 2,
-    "max_daily_drawdown_pct": 0.05,
+    "max_consecutive_losses": 3,
+    "max_daily_drawdown_pct": 0.15,
     "max_open_positions": 2,
-    "max_total_open_risk_pct": 0.04,
-    "max_position_pct": 0.90,
+    "max_total_open_risk_pct": 0.2,
+    "max_position_pct": 1.0,
     "allow_margin": false,
     "allow_averaging_down": false,
     "whole_shares_only": true,
     "pdt_guard": true,
     "max_day_trades_per_5d": 3,
-    "backtest_halt_cooldown_days": 5
+    "backtest_halt_cooldown_days": 5,
+    "equity_floor": 15.0
   },
-
   "strategy": {
     "ema_fast": 9,
     "ema_mid": 20,
@@ -51,29 +49,28 @@
     "market_symbol": "SPY",
     "market_max_atr_pct": 0.025,
     "market_max_abs_day_move": 0.03,
-    "earnings_blackout_days": 3
+    "earnings_blackout_days": 3,
+    "market_require_uptrend": true
   },
-
   "universe": {
     "min_price": 2.0,
     "max_price": 22.5,
     "min_avg_dollar_volume": 20000000,
     "exclude_leveraged_etfs": true
   },
-
   "costs": {
     "commission_per_order": 0.0,
     "min_half_spread": 0.01,
     "half_spread_pct": 0.0005,
     "slippage_pct": 0.0005,
     "stop_slippage_pct": 0.0015,
-    "sec_fee_rate": 0.0000278,
+    "sec_fee_rate": 2.78e-05,
     "taf_per_share": 0.000166
   },
-
   "broker_rules": {
     "oco_min_distance_pct": 0.0025,
-    "oco_min_leg_gap": 0.10,
+    "oco_min_leg_gap": 0.1,
     "fractional_supports_stop_orders": false
-  }
+  },
+  "approval_note": "2026-11-17: user asked Claude to act as their trader (research, pick and execute) and accepted higher risk. Stock orders still require the user's approval in the Robinhood app."
 }

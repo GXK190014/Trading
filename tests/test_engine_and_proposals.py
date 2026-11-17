@@ -43,16 +43,20 @@ def _plan(**kw):
     return TradePlan(**base)
 
 
-def test_live_trading_off_by_default(settings):
-    assert not live_enabled(settings)
-    p = build_proposal(_plan(), settings)
-    assert p["status"].startswith("PAPER_ONLY")
+def test_paper_mode_proposals_are_marked_paper_only(settings):
+    s = copy.deepcopy(settings)
+    s["mode"], s["live_trading_approved"] = "paper", False
+    assert not live_enabled(s)
+    assert build_proposal(_plan(), s)["status"].startswith("PAPER_ONLY")
 
 
 def test_live_needs_both_mode_and_approval(settings):
     s = copy.deepcopy(settings)
-    s["mode"] = "live"
+    s["mode"], s["live_trading_approved"] = "live", False
     assert not live_enabled(s)
+    s["mode"], s["live_trading_approved"] = "paper", True
+    assert not live_enabled(s)
+    s["mode"] = "live"
     s["live_trading_approved"] = True
     assert live_enabled(s)
     assert build_proposal(_plan(), s)["status"] == "AWAITING_USER_APPROVAL"

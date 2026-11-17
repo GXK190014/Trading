@@ -59,6 +59,31 @@ def import_robinhood_json(path: str | Path, out_dir: Path | None = None, merge: 
     return written
 
 
+def fill_daily_from_intraday(interval: str = "30minute", bars_per_session: int = 13) -> dict[str, list[str]]:
+    """Robinhood publishes the newest *daily* bar late (it comes back `interpolated` for a
+    while). Build missing daily bars from complete intraday sessions instead: a session
+    counts only if all `bars_per_session` regular-hours bars are present."""
+    added: dict[str, list[str]] = {}
+    src = INTRADAY_DIR / interval
+    for f in sorted(src.glob("*.csv")):
+        intr = pd.read_csv(f)
+        intr["ts"] = pd.to_datetime(intr["date"], utc=True)
+        intr["session"] = intr["ts"].dt.tz_convert("America/New_York").dt.strftime("%Y-%m-%d")
+        daily_path = DAILY_DIR / f.name
+        have = set(pd.read_csv(daily_path, dtype={"date": str})["date"]) if daily_path.exists() else set()
+        rows = []
+        for session, g in intr.sort_values("ts").groupby("session"):
+            if session in have or len(g) < bars_per_session:
+                continue
+            rows.append({"date": session, "open": g["open"].iloc[0], "high": g["high"].max(),
+                         "low": g["low"].min(), "close": g["close"].iloc[-1], "volume": int(g["volume"].sum())})
+        if rows:
+            old = pd.read_csv(daily_path, dtype={"date": str}) if daily_path.exists() else pd.DataFrame()
+            pd.concat([old, pd.DataFrame(rows)]).sort_values("date").to_csv(daily_path, index=False)
+            added[f.stem] = [r["date"] for r in rows]
+    return added
+
+
 def load_daily(symbol: str, data_dir: Path | None = None) -> pd.DataFrame:
     path = (data_dir or DAILY_DIR) / f"{symbol}.csv"
     df = pd.read_csv(path, parse_dates=["date"]).set_index("date").sort_index()
