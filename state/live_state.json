@@ -1,0 +1,30 @@
+{
+  "mode": "live",
+  "last_processed": null,
+  "risk": {
+    "equity": 25.0,
+    "cash": 25.0,
+    "day_start_equity": 25.0,
+    "current_day": "2026-11-17",
+    "consecutive_losses": 0,
+    "halted": false,
+    "halt_reason": null,
+    "halted_until": null,
+    "day_halted": false,
+    "day_trades": [],
+    "open_positions": {}
+  },
+  "broker": {
+    "cash": 25.0,
+    "positions": {},
+    "pending": []
+  },
+  "entry_fees": {},
+  "equity_curve": [
+    [
+      "2026-11-17",
+      25.0
+    ]
+  ],
+  "halts": 0
+}
