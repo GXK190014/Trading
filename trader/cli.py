@@ -94,8 +94,28 @@ def cmd_paper(args, settings):
     save_state("paper", st)
 
 
+def cmd_market(args, settings):
+    """Fast market-filter check from one live SPY price (no bulk data needed)."""
+    from .data import load_daily
+    from .indicators import ema
+    sc = settings["strategy"]
+    spy = load_daily(sc["market_symbol"])
+    prev_ema = float(ema(spy["close"], sc["ema_slow"]).iloc[-1])
+    prev_close = float(spy["close"].iloc[-1])
+    alpha = 2.0 / (sc["ema_slow"] + 1)
+    ema_now = prev_ema + alpha * (args.spy - prev_ema)
+    gap, day = args.spy / ema_now - 1, args.spy / prev_close - 1
+    trend_ok = gap > 0 or not sc.get("market_require_uptrend", True)
+    calm = abs(day) <= sc["market_max_abs_day_move"]
+    verdict = "PASS: scan for setups" if trend_ok and calm else "FAIL: no new buys"
+    print(f"SPY {args.spy:.2f} vs 50-EMA {ema_now:.2f} ({gap:+.2%}), today {day:+.2%} "
+          f"(last daily bar {spy.index[-1].date()}) -> market filter {verdict}")
+
+
 def cmd_scan(args, settings):
-    data = load_universe()
+    data = load_universe(provisional=args.provisional)
+    if args.provisional:
+        print("Using TODAY'S PROVISIONAL bars (session still open): signals can change by the close.")
     st = load_state("live", settings)
     rs = risk_from_state(st)
     if args.equity is not None:
@@ -233,7 +253,10 @@ def main(argv=None):
     p.add_argument("--name", default="backtest_baseline"); p.set_defaults(fn=cmd_backtest)
     p = sub.add_parser("paper"); p.add_argument("action", choices=["step"]); p.set_defaults(fn=cmd_paper)
     p = sub.add_parser("scan"); p.add_argument("--equity", type=float); p.add_argument("--cash", type=float)
+    p.add_argument("--provisional", action="store_true", help="include today's partial bar (intraday check)")
     p.set_defaults(fn=cmd_scan)
+    p = sub.add_parser("market"); p.add_argument("--spy", type=float, required=True, help="live SPY price")
+    p.set_defaults(fn=cmd_market)
     p = sub.add_parser("live"); p.add_argument("action", choices=["sync", "fill", "reset-halt"])
     p.add_argument("--equity", type=float); p.add_argument("--cash", type=float)
     p.add_argument("--symbol"); p.add_argument("--side", choices=["buy", "sell"]); p.add_argument("--qty", type=float)

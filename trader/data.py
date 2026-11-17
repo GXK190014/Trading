@@ -84,9 +84,40 @@ def fill_daily_from_intraday(interval: str = "30minute", bars_per_session: int =
     return added
 
 
-def load_daily(symbol: str, data_dir: Path | None = None) -> pd.DataFrame:
+PROVISIONAL_DIR = ROOT / "data" / "provisional"
+
+
+def build_provisional(interval: str = "30minute", bars_per_session: int = 13) -> dict[str, float]:
+    """Today's bar *so far* from intraday bars, for intraday checks. Kept apart from
+    data/daily (a partial bar there would block the complete one later). Volume is scaled by
+    the share of the session elapsed so relative volume stays comparable to full days.
+    Returns {symbol: fraction of session elapsed}."""
+    PROVISIONAL_DIR.mkdir(parents=True, exist_ok=True)
+    for old in PROVISIONAL_DIR.glob("*.csv"):
+        old.unlink()
+    out: dict[str, float] = {}
+    for f in sorted((INTRADAY_DIR / interval).glob("*.csv")):
+        intr = pd.read_csv(f)
+        intr["ts"] = pd.to_datetime(intr["date"], utc=True)
+        intr["session"] = intr["ts"].dt.tz_convert("America/New_York").dt.strftime("%Y-%m-%d")
+        today = intr["session"].max()
+        g = intr[intr["session"] == today].sort_values("ts")
+        if g.empty or len(g) >= bars_per_session:
+            continue  # complete sessions go to data/daily via fill_daily_from_intraday
+        frac = len(g) / bars_per_session
+        pd.DataFrame([{"date": today, "open": g["open"].iloc[0], "high": g["high"].max(), "low": g["low"].min(),
+                       "close": g["close"].iloc[-1], "volume": float(g["volume"].sum()) / frac}]
+                     ).to_csv(PROVISIONAL_DIR / f.name, index=False)
+        out[f.stem] = round(frac, 2)
+    return out
+
+
+def load_daily(symbol: str, data_dir: Path | None = None, provisional: bool = False) -> pd.DataFrame:
     path = (data_dir or DAILY_DIR) / f"{symbol}.csv"
     df = pd.read_csv(path, parse_dates=["date"]).set_index("date").sort_index()
+    if provisional and (PROVISIONAL_DIR / f"{symbol}.csv").exists():
+        p = pd.read_csv(PROVISIONAL_DIR / f"{symbol}.csv", parse_dates=["date"]).set_index("date")
+        df = pd.concat([df, p[p.index > df.index.max()]])
     df = df[~df.index.duplicated(keep="last")]
     return df[["open", "high", "low", "close", "volume"]].astype(float)
 
@@ -95,6 +126,7 @@ def available_symbols(data_dir: Path | None = None) -> list[str]:
     return sorted(p.stem for p in (data_dir or DAILY_DIR).glob("*.csv"))
 
 
-def load_universe(symbols: list[str] | None = None, data_dir: Path | None = None) -> dict[str, pd.DataFrame]:
+def load_universe(symbols: list[str] | None = None, data_dir: Path | None = None,
+                  provisional: bool = False) -> dict[str, pd.DataFrame]:
     symbols = symbols or available_symbols(data_dir)
-    return {s: load_daily(s, data_dir) for s in symbols}
+    return {s: load_daily(s, data_dir, provisional) for s in symbols}

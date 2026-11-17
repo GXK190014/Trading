@@ -31,6 +31,19 @@ system does not trade crypto (spread ~1.9%, see README).**
    (or "no setups, holding cash" plus the reason).
 6. `python -m trader dashboard --mode live`; commit and push `state/ journal/ proposals/ data/ reports/`.
 
+## Intraday check (every 30 min, weekdays ~10:07 AM – 3:37 PM ET)
+
+1. `get_equity_quotes` for SPY, then `python -m trader market --spy <last_trade_price>`.
+2. **FAIL** → one line to the user (SPY vs its 50-EMA, today's move) and stop. No bulk data.
+3. **PASS** → refresh `30minute` bars for the universe (as in evening step 3), then
+   `python -c "from trader.data import fill_daily_from_intraday as f, build_provisional as b; f(); print(b())"`
+   and `python -m trader scan --provisional --equity E --cash C`.
+4. Before 3:00 PM ET: report setups that are *forming* (they can still fail by the close). No orders.
+5. From 3:00 PM ET: for each plan, run the morning pre-trade checks. If a plan passes, message:
+   "Ready to execute: BUY N SYM limit $X, stop $Y, target $Z, max loss $L. Reply **go**."
+   Place it only after the user's "go" (the order then also needs approval in the Robinhood app),
+   and put the OCO on as soon as it fills, before 4:00 PM.
+
 ## Morning check (weekdays ~10:07 AM ET)
 
 1. Newest `proposals/<date>.json`. No plans → stop quietly unless positions need attention.
