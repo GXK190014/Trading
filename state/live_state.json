@@ -2,21 +2,44 @@
   "mode": "live",
   "last_processed": null,
   "risk": {
-    "equity": 25.0,
-    "cash": 25.0,
+    "equity": 24.88,
+    "cash": 0.5,
     "day_start_equity": 25.0,
-    "current_day": "2026-11-17",
+    "current_day": "2026-11-18",
     "consecutive_losses": 0,
     "halted": false,
     "halt_reason": null,
     "halted_until": null,
     "day_halted": false,
     "day_trades": [],
-    "open_positions": {}
+    "open_positions": {
+      "SPY": {
+        "symbol": "SPY",
+        "shares": 0.033408,
+        "entry": 733.35,
+        "stop": 696.68,
+        "risk_dollars": 1.2722733128632353
+      }
+    }
   },
   "broker": {
-    "cash": 25.0,
-    "positions": {},
+    "cash": 0.5,
+    "positions": {
+      "SPY": {
+        "symbol": "SPY",
+        "shares": 0.033408,
+        "entry_price": 733.35,
+        "entry_date": "2026-11-18",
+        "stop": 696.68,
+        "target": 748.74,
+        "setup": "manual",
+        "plan": {
+          "stop": 696.68,
+          "target": 748.74
+        },
+        "bars_held": 0
+      }
+    },
     "pending": []
   },
   "entry_fees": {},
@@ -24,6 +47,10 @@
     [
       "2026-11-17",
       25.0
+    ],
+    [
+      "2026-11-18",
+      24.88
     ]
   ],
   "halts": 0
