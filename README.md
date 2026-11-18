@@ -129,6 +129,21 @@ Both proxies are below their 50-day EMA as of 2026-11-13, so the rules would not
 Revisit if BTC regains its trend *and* a cheaper routing (Robinhood app → Settings → Crypto →
 Fee Tiers) measurably cuts the spread.
 
+## Same-day ("quick in and out") trading: tested, rejected (2026-11-17)
+
+`trader/intraday.py` + `tools/intraday_backtest.py`: opening-range breakout above VWAP on
+real Robinhood 30-minute bars (Jan 30 – Nov 17 2026, 202 sessions, 48 stocks), rules fixed
+before the first run, 10% risk per trade, 3 day trades per 5 days, all exits by the close.
+
+| Variant | $25 → | Trades | Win rate | Avg R |
+|---|---|---|---|---|
+| Base | **$19.73 (−21%)** | 79 | 43% | −0.09 |
+| First / second half | −13% / −8% | 40 / 41 | 45% / 42% | — |
+| Without / with extra market filters | −14% / −17% | 93 / 57 | — | — |
+| Double costs | −43% | 74 | 32% | −0.31 |
+
+Every variant lost money; only 4 of 79 trades reached the 2:1 target. Not used live.
+
 ## Usage
 
 ```bash
