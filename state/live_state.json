@@ -2,7 +2,7 @@
   "mode": "live",
   "last_processed": null,
   "risk": {
-    "equity": 24.88,
+    "equity": 24.92,
     "cash": 0.5,
     "day_start_equity": 25.0,
     "current_day": "2026-11-18",
@@ -50,7 +50,7 @@
     ],
     [
       "2026-11-18",
-      24.88
+      24.92
     ]
   ],
   "halts": 0

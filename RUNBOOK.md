@@ -21,7 +21,9 @@ system does not trade crypto (spread ~1.9%, see README).**
    - position closed (OCO leg filled) → `python -m trader live fill --side sell ... --reason "take-profit|stop-loss"`
    - position held 10 sessions → cancel its OCO (`cancel_advanced_order`), sell (limit at bid), record the fill
    - `python -m trader live sync --equity <total_value> --cash <buying_power>`
-3. **Data:** for the symbols in `data/daily/` (batches of 10), fetch `get_equity_historicals`
+3. **Data** (skip when `python -m trader market --spy <close>` FAILS or buying power is under ~$5: the scan
+   cannot produce a trade then, and the next refresh backfills missed sessions automatically):
+   for the symbols in `data/daily/` (batches of 10), fetch `get_equity_historicals`
    interval `30minute`, start = 10 calendar days ago (large results save to a file), then
    `python -m trader import-bars <files>` and
    `python -c "from trader.data import fill_daily_from_intraday as f; print(len(f()))"`.
