@@ -31,6 +31,25 @@ system does not trade crypto (spread ~1.9%, see README).**
    (or "no setups, holding cash" plus the reason).
 6. `python -m trader dashboard --mode live`; commit and push `state/ journal/ proposals/ data/ reports/`.
 
+## SPY dip-buy position (approved by the user 2026-11-17)
+
+Strategy: `tools/dip_buy_backtest.py` (19-year test). Entry order `6afd1da7-33d1-4bca-a00f-b01da5c9a380`:
+buy $24.50 SPY, fractional market order at the 2026-11-18 open.
+
+- **After it fills** (`get_equity_orders` order_id above): record it with
+  `python -m trader live fill --side buy --symbol SPY --qty <filled qty> --price <avg price>
+  --time 2026-11-18 --stop <avg price × 0.95> --target <current SPY 5-day average>` and tell the user the fill.
+- **Every evening check**, using SPY's official close (`get_equity_quotes` → `close.price`) and
+  `data/long/SPY.csv` updated with it:
+  - close **above its 5-day simple average** → exit signal, or
+  - close **≤ 95% of the entry price** → protective exit.
+  On either, place a fractional **market sell of the full position** (`quantity` = shares held,
+  gfd, regular_hours) so it fills at the next open. The user approved these exits with the
+  trade, so no new "go" is needed; tell the user what was sent and why. Record the fill with
+  `python -m trader live fill --side sell ...` once it executes.
+- New dip-buy entries (SPY close above its 200-day average and 2-day RSI below 10) always
+  need a fresh "go" from the user.
+
 ## Intraday check (every 30 min, weekdays ~10:07 AM – 3:37 PM ET)
 
 1. `get_equity_quotes` for SPY, then `python -m trader market --spy <last_trade_price>`.
