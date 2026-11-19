@@ -2,10 +2,10 @@
   "mode": "live",
   "last_processed": null,
   "risk": {
-    "equity": 24.92,
-    "cash": 0.5,
-    "day_start_equity": 25.0,
-    "current_day": "2026-11-18",
+    "equity": 209.38,
+    "cash": 185.5,
+    "day_start_equity": 24.92,
+    "current_day": "2026-11-19",
     "consecutive_losses": 0,
     "halted": false,
     "halt_reason": null,
@@ -23,7 +23,7 @@
     }
   },
   "broker": {
-    "cash": 0.5,
+    "cash": 185.5,
     "positions": {
       "SPY": {
         "symbol": "SPY",
@@ -51,6 +51,10 @@
     [
       "2026-11-18",
       24.92
+    ],
+    [
+      "2026-11-19",
+      209.38
     ]
   ],
   "halts": 0
