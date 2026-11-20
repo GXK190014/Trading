@@ -49,6 +49,9 @@ buy $24.50 SPY, fractional market order at the 2026-11-18 open.
   gfd, regular_hours) so it fills at the next open. The user approved these exits with the
   trade, so no new "go" is needed; tell the user what was sent and why. Record the fill with
   `python -m trader live fill --side sell ...` once it executes.
+- **2026-11-20:** SPY closed $690.91, at or below the $696.68 protective level. Protective sell placed for the
+  2026-11-23 open: order `6b00b9df-c9b3-4d51-a144-4472a3a6ae5a` (0.033408 SPY, market, gfd). Record the fill
+  with `python -m trader live fill --side sell --symbol SPY --qty 0.033408 --price <avg> --time 2026-11-23 --reason stop-loss`.
 - New dip-buy entries (SPY close above its 200-day average and 2-day RSI below 10) always
   need a fresh "go" from the user.
 
